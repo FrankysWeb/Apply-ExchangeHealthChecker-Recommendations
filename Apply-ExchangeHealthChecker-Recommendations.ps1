@@ -9,10 +9,7 @@ $decision = $Host.UI.PromptForChoice($title, $question, $choices, 1)
 if ($decision -eq 0) {
 
  $PageFileSizeMB = (Get-WMIObject -class Win32_PhysicalMemory | Measure-Object -Property capacity -Sum | foreach {[Math]::Round(($_.sum / 1MB),2)*0.25})
- if ($PageFileSizeMB -gt 32768) {
-  $PageFileSizeMB = 32768
- }
-	
+
  $pagefile = Get-WmiObject Win32_ComputerSystem -EnableAllPrivileges
  $pagefile.AutomaticManagedPagefile = $false
  $pagefile.put() | Out-Null
