@@ -1,7 +1,7 @@
 # Apply-ExchangeHealthChecker-Recommendations
 This Script applies basic recommendations from Microsofts Exchange Health Checker Script.
 You can use this Script to apply these recommendations:
-  - Set static Pagefile to 32GB
+  - Set static Pagefile of 25% of installed memory size
   - Disable NIC power saving
   - set Power Plan to High Performance
   - set TCP KeepAlive to 30 min
