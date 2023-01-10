@@ -27,7 +27,7 @@ or with parameters:
 ```
 .\Apply-ExchangeHealthChecker-Recommendations.ps1 -SetStaticPagefile "y" -SetDisableNicPowersaving "y" -SetPowerPlanToHighPerformance "y" 
 -SetTCPKeepAliveTimeTo30Min "y" -SetTlsSettings "n" -SetDownloadDomains "n" -SetOASslOffloadingToFalse "y" 
--SetExchangeExtendedProtection "y"
+-SetExchangeExtendedProtection "y" -SetPowerShellSerializationPayload "y"
 ```
 
 ## Exchange Health Checker
