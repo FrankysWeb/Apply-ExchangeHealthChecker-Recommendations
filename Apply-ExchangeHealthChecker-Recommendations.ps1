@@ -46,6 +46,12 @@ Param (
     [Parameter(Mandatory = $true, Position = 7, HelpMessage = "Configure Windows Extended Protection (y/n)?")]
     [ValidateSet("y","n")]
     [string]$SetExchangeExtendedProtection
+	
+	# Configure PowerShell serialization payload feature?
+    # https://microsoft.github.io/CSS-Exchange/Diagnostics/HealthChecker/SerializedDataSigningCheck/
+    [Parameter(Mandatory = $true, Position = 8, HelpMessage = "Configure PowerShell serialization payload feature (y/n)?")]
+    [ValidateSet("y","n")]
+    [string]$SetPowerShellSerializationPayload
 )
 Process {
   if ($SetStaticPagefile -eq "y") {
@@ -169,4 +175,10 @@ Process {
     Invoke-WebRequest -Uri $ScriptPath -outfile "ExchangeExtendedProtectionManagement.ps1"
     .\ExchangeExtendedProtectionManagement.ps1
   }
+  
+  if ($SetPowerShellSerializationPayload -eq "y") {
+	New-SettingOverride -Name "EnableSigningVerification" -Component Data -Section EnableSerializationDataSigning -Parameters @("Enabled=true") -Reason "Enabling Signing Verification"
+	Get-ExchangeDiagnosticInfo -Process Microsoft.Exchange.Directory.TopologyService -Component VariantConfiguration -Argument Refresh
+  }
+  
 }
