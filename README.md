@@ -11,6 +11,7 @@ You can use this Script to apply these recommendations:
 - configure Download Domains
 - disable SSL Offloading
 - configure Windows Extended Protection
+- enable PowerShell serialization payload feature (Caution: This will restart IIS server)
 
 ## Usage
 
