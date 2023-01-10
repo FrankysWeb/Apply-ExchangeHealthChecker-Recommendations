@@ -45,7 +45,7 @@ Param (
     # https://microsoft.github.io/CSS-Exchange/Security/Extended-Protection/
     [Parameter(Mandatory = $true, Position = 7, HelpMessage = "Configure Windows Extended Protection (y/n)?")]
     [ValidateSet("y","n")]
-    [string]$SetExchangeExtendedProtection
+    [string]$SetExchangeExtendedProtection,
 	
 	# Configure PowerShell serialization payload feature?
     # https://microsoft.github.io/CSS-Exchange/Diagnostics/HealthChecker/SerializedDataSigningCheck/
