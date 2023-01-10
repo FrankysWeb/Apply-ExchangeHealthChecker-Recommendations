@@ -11,6 +11,7 @@ You can use this Script to apply these recommendations:
 - configure Download Domains
 - disable SSL Offloading
 - configure Windows Extended Protection
+- enable PowerShell serialization payload feature (Caution: This will restart IIS server)
 
 ## Usage
 
@@ -26,7 +27,7 @@ or with parameters:
 ```
 .\Apply-ExchangeHealthChecker-Recommendations.ps1 -SetStaticPagefile "y" -SetDisableNicPowersaving "y" -SetPowerPlanToHighPerformance "y" 
 -SetTCPKeepAliveTimeTo30Min "y" -SetTlsSettings "n" -SetDownloadDomains "n" -SetOASslOffloadingToFalse "y" 
--SetExchangeExtendedProtection "y"
+-SetExchangeExtendedProtection "y" -SetPowerShellSerializationPayload "y"
 ```
 
 ## Exchange Health Checker
