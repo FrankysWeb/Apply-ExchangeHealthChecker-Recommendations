@@ -46,22 +46,28 @@ Param (
     [Parameter(Mandatory = $true, Position = 7, HelpMessage = "Uninstall and disable SMB1? (y/n)?")]
     [ValidateSet("y","n")]
     [string]$SetSMB1Uninstall,
+	
+	# MSMQuninstall
+    # Warning "MSMQ Windows Feature Installed"
+    [Parameter(Mandatory = $true, Position = 8, HelpMessage = "Uninstall MSMQ Windows Feature? (y/n)?")]
+    [ValidateSet("y","n")]
+    [string]$SetMSMQ,
 
 	# IanaTimeZoneMappings.xml invalid
 	# Correct IanaTimeZoneMappings.xml with external MS Script
-    [Parameter(Mandatory = $true, Position = 8, HelpMessage = "Correct duplicate entries in IanaTimeZoneMappings.xml? (y/n)?")]
+    [Parameter(Mandatory = $true, Position = 9, HelpMessage = "Correct duplicate entries in IanaTimeZoneMappings.xml? (y/n)?")]
     [ValidateSet("y","n")]
     [string]$SetIanaTimeZoneMappings,
 
     # Configure Windows Extended Protection
     # https://microsoft.github.io/CSS-Exchange/Security/Extended-Protection/
-    [Parameter(Mandatory = $true, Position = 9, HelpMessage = "Configure Windows Extended Protection (y/n)?")]
+    [Parameter(Mandatory = $true, Position = 10, HelpMessage = "Configure Windows Extended Protection (y/n)?")]
     [ValidateSet("y","n")]
     [string]$SetExchangeExtendedProtection,
 	
 	# Configure PowerShell serialization payload feature?
     # https://microsoft.github.io/CSS-Exchange/Diagnostics/HealthChecker/SerializedDataSigningCheck/
-    [Parameter(Mandatory = $true, Position = 10, HelpMessage = "Configure PowerShell serialization payload feature (y/n)?")]
+    [Parameter(Mandatory = $true, Position = 11, HelpMessage = "Configure PowerShell serialization payload feature (y/n)?")]
     [ValidateSet("y","n")]
     [string]$SetPowerShellSerializationPayload
 )
@@ -185,6 +191,10 @@ Process {
   if ($SetSMBUninstall -eq "y") {
     Disable-WindowsOptionalFeature -Online -FeatureName SMB1Protocol -NoRestart
 	Set-SmbServerConfiguration -EnableSMB1Protocol $false -Confirm:$false
+  }
+
+  if ($SetMSMQ -eq "y") {
+    Remove-WindowsFeature NET-WCF-MSMQ-Activation45,MSMQ -Confirm:$false
   }
 
   if ($SetExchangeExtendedProtection -eq "y") {

@@ -11,6 +11,7 @@ You can use this Script to apply these recommendations:
 - configure Download Domains
 - disable SSL Offloading
 - disable and uninstall SMB1
+- uninstall MSMQ
 - correct duplicate entries in IanaTimeZoneMappings.xml
 - configure Windows Extended Protection
 - enable PowerShell serialization payload feature (Caution: This will restart IIS server)
@@ -38,8 +39,10 @@ Download Exchange Health Checker here [Exchange Health Checker](https://microsof
 
 ## Tested Exchange / Windows Server Versions
 
+- Exchange Server 2016
 - Exchange Server 2019
 - Windows Server 2022
+- Windows Server 2025
 
 ## Website
 
