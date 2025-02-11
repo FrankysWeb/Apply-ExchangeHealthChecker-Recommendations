@@ -40,16 +40,28 @@ Param (
     [Parameter(Mandatory = $true, Position = 6, HelpMessage = "Disable OutlookAnywhere SSL Offloading (y/n)?")]
     [ValidateSet("y","n")]
     [string]$SetOASslOffloadingToFalse,
+	
+	# SMB1 uninstall
+    # Error "SMB1 Installed = true" and "SMB1 Blocked = false"
+    [Parameter(Mandatory = $true, Position = 7, HelpMessage = "Uninstall and disable SMB1? (y/n)?")]
+    [ValidateSet("y","n")]
+    [string]$SetSMB1Uninstall,
+
+	# IanaTimeZoneMappings.xml invalid
+	# Correct IanaTimeZoneMappings.xml with external MS Script
+    [Parameter(Mandatory = $true, Position = 8, HelpMessage = "Correct duplicate entries in IanaTimeZoneMappings.xml? (y/n)?")]
+    [ValidateSet("y","n")]
+    [string]$SetIanaTimeZoneMappings,
 
     # Configure Windows Extended Protection
     # https://microsoft.github.io/CSS-Exchange/Security/Extended-Protection/
-    [Parameter(Mandatory = $true, Position = 7, HelpMessage = "Configure Windows Extended Protection (y/n)?")]
+    [Parameter(Mandatory = $true, Position = 9, HelpMessage = "Configure Windows Extended Protection (y/n)?")]
     [ValidateSet("y","n")]
     [string]$SetExchangeExtendedProtection,
 	
 	# Configure PowerShell serialization payload feature?
     # https://microsoft.github.io/CSS-Exchange/Diagnostics/HealthChecker/SerializedDataSigningCheck/
-    [Parameter(Mandatory = $true, Position = 8, HelpMessage = "Configure PowerShell serialization payload feature (y/n)?")]
+    [Parameter(Mandatory = $true, Position = 10, HelpMessage = "Configure PowerShell serialization payload feature (y/n)?")]
     [ValidateSet("y","n")]
     [string]$SetPowerShellSerializationPayload
 )
@@ -169,6 +181,11 @@ Process {
   if ($SetOASslOffloadingToFalse -eq "y") {
     Get-OutlookAnywhere -Server $env:computername | Set-OutlookAnywhere -SSLOffloading $false -InternalClientsRequireSsl $true -ExternalClientsRequireSsl $true
   }
+  
+  if ($SetSMBUninstall -eq "y") {
+    Disable-WindowsOptionalFeature -Online -FeatureName SMB1Protocol -NoRestart
+	Set-SmbServerConfiguration -EnableSMB1Protocol $false -Confirm:$false
+  }
 
   if ($SetExchangeExtendedProtection -eq "y") {
     $ScriptPath = "https://github.com/microsoft/CSS-Exchange/releases/latest/download/ExchangeExtendedProtectionManagement.ps1"
@@ -180,5 +197,10 @@ Process {
 	New-SettingOverride -Name "EnableSigningVerification" -Component Data -Section EnableSerializationDataSigning -Parameters @("Enabled=true") -Reason "Enabling Signing Verification"
 	Get-ExchangeDiagnosticInfo -Process Microsoft.Exchange.Directory.TopologyService -Component VariantConfiguration -Argument Refresh
   }
-  
+
+  if ($SetIanaTimeZoneMappings -eq "y") {  
+    $ScriptPath = "https://github.com/microsoft/CSS-Exchange/releases/latest/download/Remove-DuplicateEntriesFromIanaMappings.ps1"
+    Invoke-WebRequest -Uri $ScriptPath -outfile "Remove-DuplicateEntriesFromIanaMappings.ps1"
+    .\Remove-DuplicateEntriesFromIanaMappings.ps1
+  }
 }
