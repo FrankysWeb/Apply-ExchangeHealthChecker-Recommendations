@@ -10,6 +10,8 @@ You can use this Script to apply these recommendations:
 - configure TLS Settings
 - configure Download Domains
 - disable SSL Offloading
+- disable and uninstall SMB1
+- correct duplicate entries in IanaTimeZoneMappings.xml
 - configure Windows Extended Protection
 - enable PowerShell serialization payload feature (Caution: This will restart IIS server)
 
