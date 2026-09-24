@@ -15,23 +15,58 @@ You can use this Script to apply these recommendations:
 - correct duplicate entries in IanaTimeZoneMappings.xml
 - configure Windows Extended Protection
 - enable PowerShell serialization payload feature (Caution: This will restart IIS server)
+- disable CredentialGuard (not supported by Exchange Server)
 
 ## Usage
 
-Download and copy this script to an Exchange Server.
-Run this script interactive:
+Download the script and copy it to an Exchange Server. Run it from an elevated Exchange Management Shell.
 
-```
-.\Apply-ExchangeHealthChecker-Recommendations.ps1
+All parameters are optional switches. Only the specified settings are applied; everything else is skipped.
+
+Apply all recommendations:
+
+```powershell
+.\Apply-ExchangeHealthChecker-Recommendations.ps1 `
+  -SetStaticPagefile `
+  -SetDisableNicPowersaving `
+  -SetPowerPlanToHighPerformance `
+  -SetTCPKeepAliveTimeTo30Min `
+  -SetTlsSettings `
+  -SetDownloadDomains `
+  -SetOASslOffloadingToFalse `
+  -SetSMB1Uninstall `
+  -SetMSMQ `
+  -SetIanaTimeZoneMappings `
+  -SetExchangeExtendedProtection `
+  -SetPowerShellSerializationPayload `
+  -SetDisableCredentialGuard
 ```
 
-or with parameters:
+Apply selected recommendations only:
 
+```powershell
+.\Apply-ExchangeHealthChecker-Recommendations.ps1 -SetTlsSettings -SetSMB1Uninstall -SetDisableCredentialGuard
 ```
-.\Apply-ExchangeHealthChecker-Recommendations.ps1 -SetStaticPagefile "y" -SetDisableNicPowersaving "y" -SetPowerPlanToHighPerformance "y" 
--SetTCPKeepAliveTimeTo30Min "y" -SetTlsSettings "n" -SetDownloadDomains "n" -SetOASslOffloadingToFalse "y" 
--SetExchangeExtendedProtection "y" -SetPowerShellSerializationPayload "y"
-```
+
+### Parameters
+
+| Parameter | Description |
+|---|---|
+| `-SetStaticPagefile` | Sets a static pagefile (25% of RAM) |
+| `-SetDisableNicPowersaving` | Disables NIC power saving |
+| `-SetPowerPlanToHighPerformance` | Sets the power plan to High Performance |
+| `-SetTCPKeepAliveTimeTo30Min` | Sets TCP KeepAliveTime to 30 minutes |
+| `-SetTlsSettings` | Applies recommended TLS settings |
+| `-SetDownloadDomains` | Configures OWA download domains |
+| `-SetOASslOffloadingToFalse` | Disables SSL offloading for Outlook Anywhere |
+| `-SetSMB1Uninstall` | Uninstalls and disables SMB1 |
+| `-SetMSMQ` | Removes MSMQ |
+| `-SetIanaTimeZoneMappings` | Removes duplicate IANA time zone mappings |
+| `-SetExchangeExtendedProtection` | Configures Extended Protection |
+| `-SetPowerShellSerializationPayload` | Enables PowerShell serialization payload signing |
+| `-SetDisableCredentialGuard` | Disables Credential Guard (not supported on Exchange Server) |
+
+A reboot is required for most settings to take effect. Run HealthChecker again afterwards to verify.
 
 ## Exchange Health Checker
 
